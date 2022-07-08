@@ -40,4 +40,4 @@ luac.out
 *.hex
 
 .idea
-*cmake*
+*cmake-*
