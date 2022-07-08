@@ -25,6 +25,17 @@ extern "C" {
 #define ELUNA_ENGINE_VERSION_V_1_0   "V1.0"
 #define VAR_NAME(x) #x
 
+#ifdef _WIN32
+#include <libloaderapi.h>
+#define DIR_SEPARATOR '\\'
+#else
+#define  DIR_SEPARATOR '/'
+#endif
+
+#ifndef MAX_PATH
+#define MAX_PATH    260
+#endif
+
 class Attribute {
 public:
     Attribute() = default;
@@ -230,8 +241,26 @@ lua_all_results_sptr LuaHandle::Handle(const attribute_sptr &foo) {
     return results_ret_sptr;
 }
 
+std::string GetApplicationPath() {
+    char path[MAX_PATH] = {0};
+#ifdef _WIN32
+    GetModuleFileNameA(NULL, path, sizeof(path));
+#else
+    readlink("/proc/self/exe", path, sizeof(path));
+#endif
+    return path;
+}
+
+std::string GetApplicationDir() {
+    std::string path = GetApplicationPath();
+    while (*(--path.end()) != DIR_SEPARATOR) {
+        path.pop_back();
+    }
+    return std::move(path);
+}
+
 int main() {
-    std::string filePath = "/src/test.lua";
+    std::string filePath = GetApplicationDir() + "../../src/test.lua";
 
     lua_handle_sptr lua_engine_sptr = std::make_shared<LuaHandle>(ELUNA_ENGINE_VERSION_V_1_0);
     if (nullptr == lua_engine_sptr) {
