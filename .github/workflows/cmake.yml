@@ -22,12 +22,12 @@ jobs:
             type: Release
             cxx: gcc
             coverage: -DCMAKE_CXX_FLAGS=--coverage
-          # - os: ubuntu-latest
-          #   type: Debug
-          #   cxx: clang
-          # - os: ubuntu-latest
-          #   type: Release
-          #   cxx: clang
+          - os: ubuntu-latest
+            type: Debug
+            cxx: clang
+          - os: ubuntu-latest
+            type: Release
+            cxx: clang
           # - os: windows-latest
           #   type: Debug
           # - os: windows-latest
