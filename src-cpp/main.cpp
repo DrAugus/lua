@@ -10,6 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <mutex>
+#include <filesystem>
 
 extern "C" {
 #include "lua.h"
@@ -242,13 +243,9 @@ lua_all_results_sptr LuaHandle::Handle(const attribute_sptr &foo) {
 }
 
 std::string GetApplicationPath() {
-    char path[MAX_PATH] = {0};
-#ifdef _WIN32
-    GetModuleFileNameA(NULL, path, sizeof(path));
-#else
-    readlink("/proc/self/exe", path, sizeof(path));
-#endif
-    return path;
+    std::filesystem::path cwd = std::filesystem::current_path()/"";
+    std::cout << cwd.string();
+    return cwd.string();
 }
 
 std::string GetApplicationDir() {
@@ -260,7 +257,7 @@ std::string GetApplicationDir() {
 }
 
 int main() {
-    std::string filePath = GetApplicationDir() + "../../src/test.lua";
+    std::string filePath = GetApplicationPath() + "/src/test.lua";
 
     lua_handle_sptr lua_engine_sptr = std::make_shared<LuaHandle>(ELUNA_ENGINE_VERSION_V_1_0);
     if (nullptr == lua_engine_sptr) {
