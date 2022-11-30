@@ -257,7 +257,7 @@ std::string GetApplicationDir() {
 }
 
 int main() {
-    std::string filePath = GetApplicationPath() + "/src/test.lua";
+    std::string filePath = GetApplicationPath() + "../../src/test.lua";
 
     lua_handle_sptr lua_engine_sptr = std::make_shared<LuaHandle>(ELUNA_ENGINE_VERSION_V_1_0);
     if (nullptr == lua_engine_sptr) {
